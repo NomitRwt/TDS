@@ -3,7 +3,7 @@ name: Daily Commit
 on:
   schedule:
     - cron: '0 3 * * *'  # Runs daily at 03:00 UTC
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   commit-job:
@@ -21,5 +21,5 @@ jobs:
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "21f1005029@ds.study.iitm.ac.in"
           git add log.txt
-          git commit -m "Automated commit: $(date)" || echo "No changes to commit"
+          git commit -m "Automated commit: $(date)" || exit 0
           git push
