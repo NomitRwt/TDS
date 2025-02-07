@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '30 2 * * *'  # Runs daily at 02:30 UTC
 
+permissions:
+  contents: write  # Grants write access to the repo
+
 jobs:
   commit:
     runs-on: ubuntu-latest
@@ -11,12 +14,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # Uses GitHub's built-in token
 
       - name: Make a dummy commit # 21f1005029@ds.study.iitm.ac.in
         run: |
-          date > date.txt
+          echo "Last run: $(date)" > date.txt
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add date.txt
-          git commit -m "Daily commit $(date)"
-          git push
+          git commit -m "Daily commit $(date)" || echo "No changes to commit"
+          git push origin main
